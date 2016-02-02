@@ -1,0 +1,11 @@
+This is a big test; how can I check the output?
+I want to make sure it's "perfect".
+Here are some test cases:
+	railroad.
+	don't
+	.railroad
+	"Happy days" are here again!
+	stra?nge
+	This is (a) clue.
+Have I covered enough te-st 000 cases?
+.

@@ -1,0 +1,15 @@
+
+An in class exercise.
+
+Write a program that reads words from standard-in removes punctuation,
+and prints the result to standard out.  It should handle the following
+punctuation symbols:
+
+	" ! ; : . ? , ( )
+
+The program should end when it sees an isolated period symbol:
+
+	.
+
+Test your program on the two given examples.  Use diff to compare your
+output to the given expected answer.

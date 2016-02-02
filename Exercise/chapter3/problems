@@ -1,0 +1,383 @@
+
+	/* Code for problem 1 (pg 94) */
+
+#include <stdio.h>
+
+main()
+{
+int i,j,k,swap;
+char c[8];
+
+c[0]='f'; c[1]='r'; c[2]='o'; c[3]='g'; c[4]=0;
+for (i=0; i<4; i++)
+  {
+  k=i;
+  for (j=i+1; j<4; j++)
+    if (c[j]-c[k] < 10)
+      k=j;
+  swap=c[i];
+  c[i]=c[k];
+  c[k]=swap;
+  }
+}
+
+
+\item
+Write a memory map for the following code.  Show all values at the
+end of execution of the program.
+
+\begin{verbatim}
+  #include <stdio.h>
+  main()
+  {
+  int a[4],i;
+  float b[3];
+  char c[3];
+  double d[4];
+
+  b[2]=6.7;
+  for (a[0]=2; a[0]>0; a[0]--)
+    b[a[0]-1]=b[a[0]]+2.3;
+  c[1]='N';
+  d[0]=12.6;
+  for (i=1; i<3; i++)
+    d[i]=d[0]+(double)b[i];
+  }
+\end{verbatim}
+
+
+\item
+Consider the following variable declarations.  Assume each variable
+stores the values in a matrix.  Write code that multiplies the matrix
+\texttt{a} by the matrix \texttt{b} and stores the result in the
+matrix \texttt{c}.
+
+\begin{verbatim}
+  float  a[2][3],b[3][2],c[2][2];
+\end{verbatim}
+
+
+\item
+Write a memory map for the following code.  Show all values at the
+end of execution of the program.
+
+\begin{verbatim}
+  #include <stdio.h>
+  main()
+  {
+  int  x[2][3][2];
+  int i,j,k;
+
+  for (i=0; i<3; i++)
+    for (j=0; j<2; j++)
+      x[0][i][j]=i*3+j;
+  for (k=0; k<2; k++)
+    for (j=0; j<2; j++)
+      x[1][k][j]=x[0][j][k]-1;
+  }
+\end{verbatim}
+
+
+\item
+Consider the following code:
+
+\begin{verbatim}
+  int i,j,t;
+  char name[50];
+  printf("What is your name? ");
+  scanf("%s",name);
+  t=0;
+  for (i=0; i<strlen(name); i++)
+    for (j='a'; j<=name[i]; j++)
+      t++;
+  printf("%d\n",t);
+\end{verbatim}
+
+If the user types "dad" (not including the quotes - just the
+3 letters dad followed by the [ENTER] key) at the prompt,
+what is the output?
+
+
+\item
+Consider the following program:
+
+\begin{verbatim}
+  #include <stdio.h>
+  main()
+  {
+  char s[10],t[10];
+  int i,j;
+
+  strcpy(s,"frog");
+  for (i=0; i<strlen(s); i++)
+    t[i]=s[i];
+  j=0;
+  for (i=0; i<strlen(t); i++)
+    j=j+(int)t[i];
+  printf("%d\n",j);
+\end{verbatim}
+
+The expected output of the program is 430, but it often produces a
+different result.  The result seems to change depending on when the
+program is run, or on which computer it is run.  Why?
+
+
+
+\item 
+Write code to split an input string (variable ``name'') into two output
+strings (variables ``first'' and ``last'').  Assume that the user provides
+input containing only the characters a-z and A-Z.  Assume there are
+exactly two capital letters in the input, one at the beginning of the
+first name, and one at the beginning of the last name.  For example,
+given the input ``JoeSmith'' your code should split it into ``Joe''
+and ``Smith''.  Your code should use the following lines:
+
+\begin{verbatim}
+  char name[50],first[25],last[25];
+  printf("What is your name? ");
+  scanf("%s",name);
+\end{verbatim}
+
+
+\item
+Write a complete program that prompts the user for an input string,
+sorts its characters, and prints out the sorted output.  Assume the
+string contains no spaces and is at most 30 characters.  Sort the
+characters according to byte values, irrespective of the symbols those
+values represent, from smallest to largest.  The output should be one
+contiguous string, printed on one line.
+Example:  ``Input: apple'' should print ``aelpp''.
+
+
+\item
+What is the output of the following code?
+
+\begin{verbatim}
+  double d[4][3];
+  int i,j;
+
+  for (i=0; i<4; i++)
+    for (j=0; j<3; j++)
+      if (j == 0)
+        d[i][j]=(double)i /10.0;
+      else
+        d[i][j]=d[i][j-1]+(double)i*2.0;
+  printf("%lf\n",d[3][2]);
+\end{verbatim}
+
+
+\item
+Write code to ``de-vowel'' an input string.  Assume that the user
+provides input containing only the characters a-z (and all lower case).
+Your code should create an output string that deletes all vowels from
+the input string, pushing the letters together to fill any gaps.
+For example, given the input ``theturtleandthehare'' your code should
+print out ``thtrtlndthhr''. 
+
+Your program should create an output string from the input string,
+before presenting its output, and should include the following lines:
+
+\begin{verbatim}
+  char input[80],output[80];
+  printf("Enter a string: ");
+  scanf("%s",input);
+\end{verbatim}
+
+
+\item
+Write out the memory map for the following code, providing all
+values at the end of execution.  Assume the user enters ``8654115''
+(without the quotes) at the prompt.  How many total bytes does this
+code declare for variables?
+
+\begin{verbatim}
+  main()
+  {
+  char     x[3][8];
+  int      j,length;
+  float    number;
+  double   avg;
+
+  for (j=0; j<3; j++)
+    if (j == 0)
+      {
+      printf("Enter input string: ");
+      scanf("%s",x[0]);
+      length=strlen(x[0]);
+      }
+    else if (j == 1)
+      {
+      x[0][0]='9'; x[1][0]='7'; x[2][0]='5';
+      number=(float)(x[0][0]+x[2][0]);
+      }
+    else
+      avg=(double)(x[0][0]+x[1][0])/2.0;
+  }
+\end{verbatim}
+
+
+\item
+Write a complete program that prompts a user for a filename and then
+prints out only the suffix of the filename.  Assume the filename will
+take the form of ``filename.suffix'', where both the filename and the
+suffix will contain one or more characters each, and the period will
+always be present to demarcate the boundary.
+
+
+\item
+Write a program that looks at all the command line arguments and
+reports if any of the arguments are the same (they match exactly).
+The program should print out the matching argument and the positions
+it occupies in the list of arguments.
+
+
+\item
+Write a program that accepts up to 6 arguments at the command line prompt.
+The program should print the first character of any odd-numbered arguments
+(numbers 0, 2 and 4), and the second character of any even-numbered arguments
+(numbers 1, 3 and 5).  The characters printed should be separated by spaces.
+The program should inform the user of the correct program usage if less
+than 2 or more than 6 arguments are provided.  Assume each argument contains
+at least 2 characters.  For example:
+
+\begin{verbatim}
+  ahoover@video> myprog arg1 200 list all arg5
+  m r 2 i a r
+  ahoover@video> 
+\end{verbatim}
+
+
+\item
+Write a program that allows the user to perform pseudo arithmetic on a
+string.  Upon starting, the program should tell the user that it is a
+string math program, along with brief instructions on how to use the
+program.  The program should then enter a loop, where it gives a prompt,
+such as ``input:''.  Upon receiving input from the user, the program
+should process it, report the output result (or error), and loop back
+to the prompt.  This should continue until the user gives the keyphrase
+to exit the program (keyphrase is your choice, good choices are
+``quit'', ``end'', ``exit'', etc.).
+
+Input from the user should be of the form SOS, where S represents a
+string and O represents a mathematical symbol.  There should be no
+spaces between the three parts (the two S's and the O).  A string
+should consist of from 1 to 9 lower case letters.  The mathematical
+symbol should be from the set + - / *.  These symbols correspond to
+their natural use in the C language:  addition, subtraction, division
+and multiplication.
+
+If the user inputs a string containing symbols outside the lower case
+letters, or if the string has more than 9 characters, the program
+should report an error.  If the user inputs a mathematical symbol
+outside the expected set, the program should report an error.
+If the input provided by the user is not of the form SOS, for example
+if it is only SO, or only S, then the program should report an error.
+The error messages can be generic, they do not have to describe
+specifically what the user did wrong.
+
+If a grammatically correct input is entered, the program should convert
+the two strings to integer arrays and perform the given operation on
+each cell independently.  The resulting array should then be converted
+back to a string, and displayed to the user.  For example:
+
+\begin{verbatim}
+  Input> abc+aab
+  abc + aab => bce
+\end{verbatim}
+
+The output must be exactly in that format, showing the two strings
+and mathematical symbol separated by spaces, to demonstrate that the
+program has correctly subdivided the input into its 3 parts.
+
+The mathematical operations should work as follows.  Each character
+should be converted to an integer in the range 1-26 (a is 1, b is 2,
+c is 3, ..., z is 26).  The operation should then be performed using
+integer math.  If the result is inside the range 1-26, then the output
+character should be the corresponding lower case letter.  If the result
+is outside the range 1-26, then the output character should be a
+capitalized version of the input character from the first string.
+For example:
+
+\begin{verbatim}
+  Input> wxy+bbb
+  wxy + bbb => yzY
+\end{verbatim}
+
+If the two input strings are not the same length, then each output
+character beyond the length of the shorter string should be a copy of
+the character from the longer string.  For example:
+
+\begin{verbatim}
+  Input> xyz+a
+  xyz + a => yyz
+\end{verbatim}
+
+Finally, here are some additional examples to clarify all expected
+operations.  These do not necessarily encompass all checks for errors,
+or all the cases that need to be tested.
+
+\begin{center}
+\begin{tabular}{| l | l |}
+\hline
+example input & correct output \\
+\hline
+abc-aa & Aac \\
+dog*cat & loG \\
+turtle/frog & caable \\
+Frog+turtle & bad input \\
+bird/tiger & BabDr \\
+emu+zebra & Erwra \\
+\hline
+\end{tabular}
+\end{center}
+
+This lab should be done entirely without string functions.  Avoid any
+usage of strlen(), strcpy(), strcmp(), and the related functions.
+
+
+\item
+Write a program that allows the user to spell check an ASCII text file.
+The program should read in a dictionary of words from the plain ASCII
+file linux.words (usually found in /usr/share/dict, but depends on your
+system's installation of \texttt{ispell}) and store it in a suitable array.
+The program should then read words, one at a time, from the user-given
+input file.  Each word should be compared to the dictionary.  If an exact
+match is found, the program should continue to the next word.  If no
+exact match is found, then the program should begin searching for
+suitable suggestions for replacement.
+
+The search for replacement words should work as follows.  Let N be the
+length of the original input word, minus 1.  Starting with that value
+of N, the program should search for any exact matches of the first N
+characters of the input word with any words in the dictionary, and add
+them to a suggestion list.  Following that, the program should search
+for any exact matches of an N substring anywhere inside the input word,
+as compared to anywhere inside a dictionary word.  Decrease the value
+of N by 1, and repeat.  This process should stop when 10 words have
+been suggested, or when N reaches 0.  
+
+The program should provide the list of suggestions to the user through
+a simple text menu.  One option in that menu should be to keep the
+original word.
+
+Either upon verifying that the original word is found in the dictionary,
+or upon the user selecting a replacement, the program should write
+the appropriate word to an output file.  The program should discover
+the names of both the input file and the output file from command line
+arguments.  The program should check to make sure that the appropriate
+number of command line arguments is given by the user, and if not,
+report an error along with the proper usage of the program.
+
+The program does not have to be concerned with spacing or arrangement
+between words.  Words can be output one per line, for example, even
+though that does not match how they were arranged in the input file.
+The program does not need to handle punctuation characters, and can
+disregard them while checking spelling.
+
+
+
+\end{enumerate}
+
+
+
+
