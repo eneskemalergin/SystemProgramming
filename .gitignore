@@ -30,3 +30,21 @@
 
 # Debug files
 *.dSYM/
+
+# Data storage
+
+*.bed
+*.wig
+*.bigWig
+*.gz
+*.fa
+*.gtf
+*.fna
+*.zip
+*.net
+*.t7
+*.hdf5
+*.h5
+
+.DS_Store
+.ipynb_checkpoints
