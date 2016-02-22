@@ -151,5 +151,100 @@ __UNICODE__:
 - 65,536 bit patterns (65,536 characters)
 - 16 bit is used to represent the patterns
 - In C, ```short int``` is commonly used to represent them.
-- Firs 128 bit patterns are the same as ASCII
-- 
+- First 128 bit patterns are the same as ASCII
+
+
+## Bitwise Operations
+
+In some cases single bit can change a lot of things in the program. Compression/decompression, sorting with trees, and common drivers and graphics programming uses bitwise modifications. Changing the program bitwise can be very fast and complicated.
+
+### 1. Binary Logic Operations
+
+Single bit can have 0 or 1 which represents False and True. 3 most basic logic operations are;
+
+- AND
+  - 0 AND 0 = 0
+  - 0 AND 1 = 0
+  - 1 AND 0 = 0
+  - 1 AND 1 = 1
+- OR
+  - 0 OR 0 = 0
+  - 0 OR 1 = 0
+  - 1 OR 0 = 0
+  - 1 OR 1 = 1
+- NOT
+  - NOT 0 = 1
+  - NOT 1 = 2
+
+
+### 2. Bit Operators
+
+There are six bitwise operators:
+
+- ```~```   Bitwise NOT
+- ```&```   Bitwise AND
+- ```|```   Bitwise OR
+- ```^```   Bitwise XOR
+- ```>>```  Bitwise right-shift
+- ```<<```  Bitwise left-shift
+
+Usually bitwise operators are used with whole number data types such as ```char``` and ```int```. It's rarely used with real number data types.
+
+```C
+unsigned char a;
+a=17;
+a=~a;
+printf("%d\n",a);
+
+// 238
+
+// a=17; | 0 0 0 1 0 0 0 1 |  17
+// a=~a; | 1 1 1 0 1 1 1 0 |  238
+```
+
+### 3. Bitmask Operations
+
+These operations are using bitmasks to select specific bits to manipulate. The idea is to operate on a variable, changing or affecting only the bits indicated by the bitmask:
+
+3 most common bitmask operations work on a single bit:
+- Set the bit
+  - Set the Nth Bit: ```x = x OR 2^N```
+  - Setting the Bit gives bit the value ```1``` regardless of the value before setting and others remain same.
+- Clear the bit
+  - Clear the Nth Bit: ```x = x AND NOT(2^N)```
+  - Clearing the bit gives bit the value ```0``` regardless of the value before setting and other remain same.
+- Query the value of the bit.
+  - Read the Nth Bit:  ```= x AND 2^N```
+  - Querying a bit determines the current value of a bit, leaving all bit values unchanged.
+
+
+In C:
+
+```C
+x = x | (1<<N); // set Nth bit
+x = x & (~(1<<N)); // clear Nth bit
+(x & (1<<N)) >>N;  //read Nth bit
+```
+
+The following code demonstrates setting, clearing, and reading bits:
+
+```C
+char a;
+int i;
+a=17;
+a=a | (1 << 3); /* set 3rd bit */
+printf("%d\n",a);
+a=a & (~(1<<4)); /* clear 4th bit */
+printf("%d\n",a);
+for (i=7; i>=0; i--)
+  printf("%d ",(a&(1<<i)) >> i); /* read i’th bit */
+printf("\n");
+
+/* Result of the code above:
+25
+9
+0 0 0 0 1 0 0 1
+*/
+```
+
+> Memory Map part is not included...  
