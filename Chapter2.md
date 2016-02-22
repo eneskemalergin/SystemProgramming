@@ -94,4 +94,62 @@ This model comes up to overcome Sign-magnitude's drawbacks.
 
 ```
 
-This approach is called a _fixed point_ bit model.
+This approach is called a _fixed point_ bit model. This usage is usually considered as poor usage of bits so not very much common...
+
+There is another representation using _floating-point_ bit model. The general idea is to represent the number using scientific notation.
+
+```C
+123.456 = 1.23456 × 10^2 // In base 10
+
+18.375 (base 10) = 10010.011 (base 2) = 1.0010011× 2^4
+```
+
+- floating point bit model stores numbers in the following form: ``` ±(1*f) * (2**e)```
+- The values that must be stored: (For given 4byte - 32bits)
+  - Sign > 1bit
+  - Fraction (f) > 23bits
+  - Exponent (e) >  8bits
+  - Bit places:
+    - 31st place for Sign bit
+    - 30 - 23 for Exponent
+    - 22 - 0  for Fraction
+
+
+The following steps can be used to convert a number from base 10 to binary using the floating point bit model:
+  1. Write the sign bit.
+  2. Write the number in fixed point binary, without the sign.
+  3. Normalize, moving the radix (the decimal point) to just after the first “1” digit.
+  4. Take f as the values to the right of the radix, zero padded.
+  5. Take e as the given exponent, biased by adding +127.
+
+The value −118.625 demonstrations:
+
+```C
+1 // is the sign bit
+118.625 = 1110110.101 // Writing the number in fixed point binary
+1110110.101 = 1.110110101 * 2**6 // Normalize
+110 1101 0100 0000 0000 0000 // Get fraction from right of radix
+e = 6+127 = 133 = 1000 0101  // Get exponent, biased +127
+
+```
+> double still uses 1 bit for sign, but it uses 11 bits to store the exponent and 52 bits to store the fraction
+
+### 5.ASCII and UNICODE Bit Models
+
+For representing nonnumeric data we use different type of bit model; ASCII or UNICODE
+
+__ASCII__:
+
+- 128 Bit patterns (128 characters)
+- 7 Bit is used to represent a patterns and filled 8th as non used one.
+- Most of the bit patterns are printable characters
+- In C, ```char``` and ```unsigned char``` used ASCII bit model.
+- Dual interpretation ?
+
+__UNICODE__:
+
+- 65,536 bit patterns (65,536 characters)
+- 16 bit is used to represent the patterns
+- In C, ```short int``` is commonly used to represent them.
+- Firs 128 bit patterns are the same as ASCII
+- 
