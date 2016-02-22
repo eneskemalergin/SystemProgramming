@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-main()
+int main()
 {
 char i;
 double d;
@@ -17,3 +17,5 @@ for (i='z'; i>='w'; i--)
 printf("%d\n",t);
 }
 
+// Output
+// 8

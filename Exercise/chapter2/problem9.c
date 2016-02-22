@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-main()
+int main()
 {
 unsigned char x,y,z;
 
@@ -16,3 +16,7 @@ z=~z;
 printf("%d %d %d\n",x,y,z);
 }
 
+
+/* Output of the program
+79 3 122
+*/

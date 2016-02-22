@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-main()
+int main()
 {
 int i,j;
 
@@ -16,3 +16,13 @@ for (i=1; i<100; i=i<<1)
   }
 }
 
+/* Output
+1 0
+2 2
+4 6
+8 14
+16 14
+32 46
+64 110
+
+*/
