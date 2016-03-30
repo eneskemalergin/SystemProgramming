@@ -369,3 +369,90 @@ a=(double *)malloc(300); /* memory leak */
 The second request without closing the first one in the same location cause and overwrite, which leads to memory loss from the first attempt.
 
 ### Double Pointers
+We can use a double pointer to act like a two-dimensional array. Consider the following code, which declares a double pointer:
+
+```C
+double **ptr;
+// For better understanding we can also write it as such:
+double *(*ptr);
+```
+
+- The usage, ```*(*ptr)``` must mean “the double at the address given by the address given by.”
+- The size of double pointer is still 4 bytes since it is still only address.
+
+The following code demonstrates using a double pointer like a two-dimensional array:
+
+```C
+double **m;
+m=(double **)calloc(2,sizeof(double *));
+m[0]=(double *)calloc(3,sizeof(double));
+m[1]=(double *)calloc(2,sizeof(double));
+m[0][1]=6.3;
+m[1][0]=-2.8;
+```
+
+The first ```calloc()``` function call asks for enough bytes to store two pointers (addresses), or 8 bytes total. Each of these pointers is then used to store the address of a number of doubles (3 doubles in the second ```calloc()```, and 2 doubles in the third ```calloc()```). Once all the memory is allocated, it may be accessed as though it were a two-dimensional array. The memory map for this code may be written as:
+
+Label | Address | Value
+ ---  | ------- | ----
+m | 400–403 | 10000
+*(m+0) m[0] | 10000–10003 | 10008
+*(m+1) m[1] | 10004–10007 | 10032
+*(*(m+0)+0) m[0][0] | 10008–10015|
+*(*(m+0)+1) m[0][1] | 10016–10023|  6.3
+*(*(m+0)+2) m[0][2] | 10024–10031|
+*(*(m+1)+0) m[1][0] | 10032–10039| -2.8
+*(*(m+1)+1) m[1][1] | 10040–10047|
+
+- The variable ```m``` holds a double pointer, or the address of a list of addresses (10000).
+- The list of addresses is ```m[0]``` and ```m[1]```, each of which holds an address of a list of doubles (10008 and 10032).
+
+---
+
+Another common use of double pointers is the passing of a pointer variable to a function. This is necessary when a function needs to dynamically allocate memory and then pass that memory back to the calling function.
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+int integers(int listsize,int **list)
+{
+  int i;
+  *list=(int *)malloc(listsize*sizeof(int));
+
+  if (*list == NULL)
+    return(0);
+
+  for (i=0; i<listsize; i++)
+    (*list)[i]=10+i; /* mixed array/pointer syntax */
+  return(1);
+}
+int main(int argc, char *argv[])
+{
+  int *numbers;
+  int i;
+  i=integers(3,&numbers);
+  for (i=0; i<3; i++)
+    printf("%d\n",numbers[i]);
+}
+```
+
+> The integers() function dynamically allocates space for a list of ints and then puts
+values in each cell.
+
+Let's now see the memory map of the current situation.
+
+Label | Address | Value
+ ---  | ------- | ----
+listsize |400–403| 3
+list |404–407| 708
+i | 408–411|   0 -> 1 -> 2 -> 3
+argc |  700–703 |
+argv | 704–707|
+numbers | 708–711| 10000
+i | 712–715 | 0 -> 1 -> 2 -> 3
+(*list)[0] numbers[0] | 10000–10003 | 10
+(*list)[1] numbers[1] | 10004–10007 | 11
+(*list)[2] numbers[2] | 10008–10011 | 12
+
+---
+## Structures
