@@ -15,6 +15,7 @@ float f,*fp;
 double d,*dp;
 ```
 Label | Address | Value
+----- | ------- | ----
 c     | 400     |
 cp    | 401–404 |
 i     | 405–408 |  
@@ -42,6 +43,7 @@ ip=&i; // store the address of i in pointer ip
 Here is the memory map of the example above:
 
 Label | Address | Value
+ ---  | ------- | ---- 
 c     | 400     |
 cp    | 401–404 |  400
 i     | 405–408 |  42
