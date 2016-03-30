@@ -275,14 +275,14 @@ In the last three lines of code shows how to access the same memory using array 
 Address Label | Label | Address | Value
 ------------- | ----- | ------- | -----
 array &(array[0])| array[0] | 400–407  | 10.0
-| array[1]  | 408–415 | 11.0
-| array[2] | 416–423 | 12.0
-| array[3] | 424–431 | 13.0
-| array[4] | 432–439 | 14.0
-| d_ptr   | 440–443 | 400
-| value   | 444–451 |
-| i       | 452–455 | 0 -> 1 -> 2 -> 3 -> 4 -> 5
-| offset  | 456–459 |
+  | array[1]  | 408–415 | 11.0
+  | array[2] | 416–423 | 12.0
+  | array[3] | 424–431 | 13.0
+  | array[4] | 432–439 | 14.0
+  | d_ptr   | 440–443 | 400
+  | value   | 444–451 |
+  | i       | 452–455 | 0 -> 1 -> 2 -> 3 -> 4 -> 5
+  | offset  | 456–459 |
 
 - The value at address 400 can be accessed through its original name ```array[0]```, or through the pointer value of ```d_ptr```, or through mixed notation using a pointer to the original address label array.
 - It can even be accessed using another mixed notation based on the other original address label ```&(array[0])```:
