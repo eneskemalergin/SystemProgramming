@@ -445,7 +445,7 @@ Label | Address | Value
  ---  | ------- | ----
 listsize |400–403| 3
 list |404–407| 708
-i | 408–411|   0 -> 1 -> 2 -> 3
+i | 408–411| 0 -> 1 -> 2 -> 3
 argc |  700–703 |
 argv | 704–707|
 numbers | 708–711| 10000
@@ -456,3 +456,70 @@ i | 712–715 | 0 -> 1 -> 2 -> 3
 
 ---
 ## Structures
+A structure is a construct used to group a set of variables together under one name. First we need to declare it's organization.
+
+```C
+struct person {   /* "person" is name for structure type */
+  char first[32]; /* first field is array of char */
+  char last[32];  /* second field is array of char */
+  int year;       /* third field is int */
+  double ppg;     /* fourth field is double */
+};                /* ending ; to end definition */
+```
+
+- This is not the variable yet, we simply created a template of design of a variable. Since it is not a variable yet, it's size is zero for now.
+- We call out new variable ```struct person```
+- Our struct variable consists of 76 Bytes (2 char arrays with size 32, int, double = 76)
+- We can use this definition of a struct person to declare a variable as follows: ```struct person teacher;```
+- Each part of the variable is called a field and is accessed using the period ```.``` symbol.
+
+```C
+teacher.year=2006;
+teacher.ppg=10.4;
+strcpy(teacher.first,"Adam");
+strcpy(teacher.last,"Hoover");
+```
+
+Memory map of the example above:
+
+Label | Address | Value
+ ---  | ------- | ----
+teacher.first | teacher teacher.first[0] | 400 | 'A'
+ | teacher.first[1] | 401 |'d'
+ | teacher.first[2] | 402 | 'a'
+ | teacher.first[3] | 403 | 'm'
+ | teacher.first[4] | 404 | '\0'
+ |teacher.first[5]-[31] | 405–431
+teacher.last | teacher.last[0] | 432 | 'H'
+ | teacher.last[1] | 433 | 'o'
+ | teacher.last[2] | 434 | 'o'
+ | teacher.last[3] | 435 | 'v'
+ | teacher.last[4] | 436 | 'e'
+ | teacher.last[5] | 437 | 'r'
+ | teacher.last[6] | 438 | '\0'
+ | teacher.last[7]-[31] | 439–463 |
+ | teacher.year | 464–467 | 2005
+ | teacher.ppg  | 468–475 | 10.4
+
+## Using Structures
+
+### Arrays and Structures
+It is possible to create an array of structs, just like it is possible to have an array of any data type.Using our definition of a struct person from above, we may write the following code:
+
+```C
+struct person class[54];  /* array of "struct person" */
+class[0].year=2006;       /* notice where array subscript goes */
+class[0].ppg=5.2;
+strcpy(class[0].first,"Jane");
+strcpy(class[0].last,"Doe");
+class[1].first[0]='B';    /* array field in a struct array */
+class[1].first[1]='O';
+class[1].first[2]='b';
+class[1].first[3]=0;
+```
+
+
+### Definitions and Scope
+Structure variables can be global or local to a function, just like any other variable. Structure definitions can also be global or local. In addition, when making a definition, a variable using that definition can be declared at the same time.
+
+> Will continue from here...
