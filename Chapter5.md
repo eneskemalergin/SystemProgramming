@@ -138,3 +138,26 @@ Every time a program is started, the O/S automatically creates three streams, wh
 ---
 
 ## Buffers
+A buffer is a __temporary storage__ between _the sender_ and _the receiver_ of bytes on a stream.
+
+A buffer is useful in a variety of situations. For example, what if the sender puts bytes into the stream faster than the receiver can handle? Or what if program is in the middle of a calculation and is not prepared to receive any bytes? The buffer can store up the bytes until the program is able to handle them, receiving them either at the reduced rate or when it is ready for them. There are three types of buffering, which differentiated by how they flushed the temporary storage they have used:
+
+- Block Buffering:
+
+  - In a block buffer, a fixed-size chunk of memory is filled before being passed on to the receiver.
+  - Used for large data transfers, such as file I/O.
+
+
+- Line Buffering:
+
+  - In a line buffer, any bytes inside the buffer are sent to the receiver once a newline character (byte value of 13) is received. The newline character is also sent to the receiver.
+  - Line buffering is typically used for text-based I/O, such as when interacting with a user.
+
+- Unbuffered:
+
+In a unbuffered each byte is sent to the receiver as soon as it is placed in the buffer. The buffer operates as though it is transparent.
+
+
+---
+
+## Pipes
