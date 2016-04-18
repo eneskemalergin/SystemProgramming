@@ -161,3 +161,74 @@ In a unbuffered each byte is sent to the receiver as soon as it is placed in the
 ---
 
 ## Pipes
+- The process of connecting and reconnecting streams is referred to as piping, or pipelining.
+- As we said before, the O/S automatically creates three streams for every running program.
+
+In the following snippet, we prompt the user for integers, reporting the sum as each new number is entered. It exits when a value of zero is entered. If the code is stored in a file called ```summer.c```
+
+```C
+#include<stdio.h>
+main(){
+int x,s;
+s=0;
+while (1){
+  printf("#? ");
+  scanf("%d",&x);
+  if (x == 0)
+    break;
+  s=s+x;
+  printf(" sum=%d\n",s);
+  }
+}
+
+/* Output in terminal
+$ gcc -o summer summer.c
+$ summer
+#? 4
+  sum=4
+#? 1
+  sum=5
+#? 7
+  sum=12
+#? 0
+*/
+```
+
+Now let's say we created an input file contains the following;
+
+```
+4
+1
+7
+0
+```
+
+then we will feed this file into the program using pipelining operators...
+
+The ```<``` symbol allows the user to redirect the stdin stream to a file instead of the keyboard. We will use the same snippet before but different approach in terminal:
+
+```Bash
+$ summer < input1.txt # As you can see here we are feeding input1.txt into our program...
+#? sum=4
+#? sum=5
+#? sum=12
+#?
+```
+
+The > symbol allows the user to redirect the stdout stream to a file instead of to the display. This symbol allow us to store the output from following program to specified output file:
+
+```Bash
+$ summer > output1.txt
+4
+1
+7
+0
+
+# If we want to check what's inside the output1.txt
+> less output1.txt
+#? sum=4
+#? sum=5
+#? sum=12
+#?
+
+```
