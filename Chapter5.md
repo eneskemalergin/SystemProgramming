@@ -232,3 +232,145 @@ $ summer > output1.txt
 #?
 
 ```
+
+### Pipeline Chaining
+Multiple piping redirections can be done simultaneously.
+
+```Bash
+$ summer < input1.txt | bingo > output2.txt
+$ more output2.txt
+Bingo!
+
+```
+
+Pipelining the output of one program to the input of another program can be done repeatedly. This allows us to write programs that perform single, simple operations, and to link them together into complex chains in order to accomplish tasks.
+
+This pipelining is very useful when you work with linux base libraries, such as ```sed```, ```grep```, ```cut```, etc.
+
+
+### Program Testing
+Pipelining can be used for testing programs. Defining input files and storing into output files, as we discussed before, will help you a lot. Imagine that you have to test your program dozens of times with pre-defined input using pipelining will save you a great deal of time. This type of file considered to be a test pattern/input.
+
+---
+
+## Files
+
+- A file is a one-dimensional array of bytes, regardless of what sort of data stored inside.
+- For data like image, database, movie, we store multi-dimensional inside the one-dimensional array, as previously discussed in chapter 3
+- Only difference when it comes to data types, is which bit model was used to group and encode the bytes.
+
+One of the main job of the OS is to manage file storage.
+
+### File Pointer
+A marker used to keep track of the location for reading or writing on a stream. When we open the file file pointer points to the first byte and automatically advanced to next one when byte read.
+
+Let's see the motion of the file pointer on ```data.txt``` file contains ```abcdef```:
+
+```C
+#include<stdio.h>
+int main(){
+  char byte;
+  FILE *fpt;   // f*
+  fpt = fopen("data.txt", "r");
+  fread(&byte, 1, 1, fpt);
+  fclose(fpt);
+}
+```
+
+When the file is first opened, the file pointer has a value of 0, indicating that it points to the first byte in the file. After first byte is read, the file pointer is advanced to point to the second byte. We can continue to our exploration on memory map:
+
+Byte  | Value
+----- | ----
+0     | 'a' (97)
+1     | 'b' (98)
+2     | 'c' (99)
+3     | 'd' (100)
+4     | 'e' (101)
+5     | 'f' (102)
+
+
+- The value of the file pointer, and hence its location, can be manipulated by ```fseek()``` function. ```fseek()``` assigns a new value without reading or writing any data on the stream.
+- The current value of the file pointer can be obtained using the ```ftell()``` function.
+
+```C
+#include <stdio.h>
+int main(int argc,char *argv[]){
+  FILE *fpt;
+  char byte;
+  long int where,move;
+  if (argc != 2)
+    {
+    printf("Usage: fileseek filename\n");
+    exit(0);
+    }
+  if ((fpt=fopen(argv[1],"r")) == NULL)
+    {
+    printf("Unable to open %s for reading\n",argv[1]);
+    exit(0);
+    }
+  while (1)
+    {
+    where=ftell(fpt); /* where is file pointer? */
+    fread(&byte,1,1,fpt); /* moves fpt ahead one byte */
+    fseek(fpt,-1,SEEK_CUR); /* back up one byte */
+    printf("Byte %d: %d (%c)\n",where,byte,byte);
+    printf("Enter #bytes (+ or -) to move, or 0 to quit: ");
+    scanf("%d",&move);
+    if (move == 0)
+      break;
+    fseek(fpt,move,SEEK_CUR); /* move to desired byte * /
+    }
+  fclose(fpt);
+  }
+```
+
+This program opens a file and allows the user to move the file pointer. It reads 1 byte and displays the byte value using both the ASCII and two's complement bit models. as well as the file pointer value for that value. This repeated until the user enters 0 to quit.
+
+
+### File Attributes
+
+When you use ```ls -l ``` command on linux shell, you will see a lot of information about the files in the current directory. Something like this:
+
+```Bash
+> ls -l
+-rw-r--r-- ahoover fusion 808 Jul 5 16:58 fileseek.c
+-rwxr-xr-x ahoover fusion 14196 May 28 16:18 ls1
+-rw-r--r-- ahoover fusion 468 May 28 20:21 ls1.c
+-rw-r--r-- ahoover fusion 803 Jul 5 16:58 statfile1.c
+-rw------- ahoover fusion 758 Jul 5 16:58 statfile2.c
+-rw-r--r-- ahoover fusion 7 Jul 5 16:58 testme.txt
+```
+
+In this list, each row provides information about a file.
+
+-  The filename itself is in the rightmost column.
+- The first column provides the permissions of the file, "r": read, "w": write, "x": execute. Hyphen (-) indicates that particular permission is denied.
+- Permissions of a file can be changed using ```chmod``` system program. Like, ``` chmod g+w ls1.c ```
+- The second column identifies the owner of the file
+- The third column identifies the group of the file
+
+
+This is not the whole information that Unix system maintains about each file. All of this information stored in tables managed by the system. The information can be accessed by using ```stat()``` function call.
+
+```C
+#include <stdio.h>
+#include <sys/stat.h> /* needed for stat() function */
+int main(int argc, char * argv[]) {
+  struct stat fileinfo; // returned info about file
+  int i;
+  if (argc != 2){
+  printf("Usage: statfile filename\n");
+  exit(0);
+  }
+  i=stat(argv[1],&fileinfo);
+  if (i == -1){
+    printf("Unable to stat %s\n",argv[1]);
+    exit(0);
+    }
+  printf("size: %d\n",fileinfo.st_size);
+  printf("permissions: %d\n",fileinfo.st_mode);
+  printf("last modified: %d\n",fileinfo.st_mtime);
+  }
+```
+
+program never opens a file, however it calls ```stat()``` on the given filename. This is because the extra file information is not contained in the one-dimensional array of bytes that is the file; rather, it is maintained in tables managed by the system.
