@@ -84,4 +84,10 @@ When compiling, unless otherwise instructed, gcc will automatically proceed to l
 
 Linking primarily serves to bring together object code files into an executable. However, it can also bring in object code from library files.
 
-![]()
+![Figure 6.2](https://raw.githubusercontent.com/eneskemalergin/SystemProgramming/master/figures/figure.6.2.jpg)
+
+Library files contain object code for functions that are frequently used. In this way, the source code can be compiled once and stored in a permanent place, ready to link.
+
+The flag ```-lc``` tells the gcc compiler to link to a library file named ```libc.a``` (C Standart Library).
+
+Why the executable can be created with or without having to explicity link to the libc.a library file (with or without the -lc flag)? The reason is that this file is so commonly linked, most compilers are set up to assume that it is needed and so link to it by default.
