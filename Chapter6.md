@@ -164,7 +164,7 @@ As you can see the preprocessing adds the ```globals.h``` which we put in the in
 > By enclosing the filename in angle brackets (< >), the preprocessor is told to search system paths for the include file. By enclosing the filename in double quotes (" "), the preprocessor is told to search within the current directory for the include file.
 
 
-<span style=\"color:red\">Any statement that begins with a pound symbol (#) is a preprocessor directive, not C code.</span>
+<p style=\"color:red\">Any statement that begins with a pound symbol (#) is a preprocessor directive, not C code.</p>
 
 Other common preprocessor directives are ```#if```, ```#else```, ```#endif```, ```#ifdef```, and ```#ifndef``` to allow for control of what string substitutions are performed.
 
@@ -298,3 +298,235 @@ $(EXEC) : main.o sqrt.o
 ---
 
 ## Code Organization
+
+Code organization in other words, making code modular, readable, and understandable is very important and very time consuming.
+
+- Writing well-organized code generally leads to a cleaner program design, which in turn generally leads to fewer flaws and bugs.
+- It is much easier to find errors in well-organized code, particularly if a bug is uncovered long after the code was written and the author has forgotten much of the design.
+- Promote code reuse and future program extension.
+
+### functions
+Using multiple functions is the most classic approach to making a program modular. Modularity is desirable for two reasons:
+
+- It divides a coding problem into pieces (divide and conquer)
+- It allows code pieces to be reused in future programming tasks.
+
+Let's see a modular approach example code:
+
+```C
+#include <stdio.h>
+#include <string.h>
+
+int ReadData(FILE * fpt, char first[20][30], char last[20][30]){
+  int total;
+  total=0;
+
+  while (1){
+    if (fscanf(fpt,"%s %s",last[total],first[total]) != 2)
+    break;
+    total++;
+  }
+
+  return(total);
+}
+
+void CapFix(char word[30]){
+  int i;
+  if (word[0] >= ’a’ && word[0] <= ’z’)
+    word[0]=word[0]-’a’+’A’;
+
+  for (i=1; i<strlen(word); i++)
+    if (word[i] >= ’A’ && word[i] <= ’Z’)
+      word[i]=word[i]-’A’+’a’;
+}
+int main(int argc, char * argv[]){
+  FILE * fpt;
+  char first[20][30],last[20][30];
+  int i,j,total;
+
+  if (argc != 2){
+    printf("Usage: capfix [filename]\n");
+    exit(0);
+  }
+
+  if ((fpt=fopen(argv[1],"r")) == NULL){
+    printf("Unable to open %s for reading\n",argv[1]);
+    exit(0);
+  }
+
+  total=ReadData(fpt,first,last);
+
+  for (i=0; i<total; i++)
+    CapFix(first[i]);
+
+  for (i=0; i<total; i++)
+    CapFix(last[i]);
+
+  for (i=0; i<total; i++)
+    printf("%s %s\n",first[i],last[i]);
+}
+```  
+
+Functions are a good tool for organizing code, but like any tool they can be used inappropriately.
+
+Calling a function takes extra program execution time, both for copying values into and out of the function, and for jumping to and from the function code for execution.
+
+Another mistake is to overuse functions. Just because some code can be encapsulated into a function doesn’t mean it should be encapsulated into a function. (__Debugging and modifying code that has been “over-functionalized” can be frustrating.__)
+
+
+### Multiple Files
+As the number of functions in a program increases, it is convenient to break them up into multiple files.
+
+- It makes it easier to edit a file.
+- It makes program building more efficient.
+
+### Variable Scope
+When breaking a program into multiple functions and files, scope is a tool that can help organize variable usage. The scope of a variable is defined in its declaration. A C variable declaration can have four parts:
+
+1. Data type: ```int, float, char, double```. (describe how many bytes of storage are used by the variable)
+2. Modifiers: ```signed, unsigned, short, long```. (modify how many bytes are used and how the bits may be used.)
+3. Qualifiers: ```const, volatile```. (provide information to the compiler as to how the variable will be used so that it may optimize appropriately)
+4. Storage class: ```auto, static, extern```. (affect the scope of the variable, that is, the visibility of the variable throughout the program)
+
+In this part of the chapter out main concern possible storage class and how it can be used. (4th part)
+
+An ```auto``` variable is visible only within its code block, and is usually omitted since it's default storage class.
+
+```C
+int Function1(float e) {
+  int x;
+  auto int y;
+  [...]
+}
+```
+
+In the example above, all variables have same storage class ```auto```, either it's written or not.
+
+---
+
+A ```static``` variable has a larger variable scope. The static keyword can be used in two contexts, either within a single function or within an entire file.
+
+- In the first case, the static storage class makes the value of the variable persistent through consecutive function calls:
+
+```C
+#include <stdio.h>
+
+int summer(int x) {
+  static int sum=0;
+  sum=sum+x;
+  return(sum);
+}
+int main(){
+  int i,j;
+  for (i=0; i<5; i++){
+    j=summer(i);
+    printf("%d\n",j);
+  }
+}
+```
+
+The variable ```sum``` has function static scope. If this code is stored in a file named ```function-static.c```, then compiling it and executing it produces the following output:
+
+```Bash
+> gcc -o function-static function-static.c
+> function-static
+0
+1
+3
+6
+10
+>
+```
+
+Each time the function ```summer()``` is called, the value of the variable ```sum``` is retained.
+
+- The ```static``` storage class provides a second scope that is similarly persistent but has a larger scope.
+
+```C
+#include <stdio.h>
+static int sq=0;
+int summer(int x){
+  static int sum=0;
+  sum=sum+x;
+  sq=sq-1;
+  return(sum);
+}
+
+int main() {
+  int i,j;
+  for (i=0; i<5; i++){
+    sq=sq+(i*i);
+    j=summer(i);
+    printf("%d %d\n",j,sq);
+  }
+}
+```
+The variable ```sq``` has file static scope. If this code is stored in a file named ```filestatic.c```, then compiling it and executing it produces the following output:
+
+```Bash
+> gcc -o file-static file-static.c
+> file-static
+0 -1
+1 -1
+3 2
+6 10
+10 25
+>
+```
+
+The value of ```sq``` is retained throughout all the function calls for this program.
+
+---
+
+An ```extern``` variable is a global variable being shared between multiple files. In order to use the extern keyword, a variable must first be declared with file scope:
+
+```C
+  // ext1.c
+#include <stdio.h>
+int x;
+int main(int argc, char * argv[]){
+  x=1;
+  printf("main: %d\n",x);
+  function();
+  printf("main: %d\n",x);
+}
+```
+
+```C
+  // ext2.c
+#include <stdio.h>
+extern int x;
+void function(){
+  printf("function: %d\n",x);
+  x=7;
+  printf("function: %d\n",x);
+}
+```
+
+The variable ```x``` is declared using the extern storage class, so that it has global scope.Compiling and executing this code produces the following output:
+
+```Bash
+> gcc -o ext ext1.c ext2.c
+> ext
+main: 1
+function: 1
+function: 7
+main: 7
+>
+```
+
+- Note that the value of ```x``` is maintained through all functions in both files.
+- To create a variable with global scope, it must be declared in one file, and then referenced as an extern in all other files that want to access it.
+
+
+### Comments, Indentation, and Variable Names
+
+- Readability is the key...
+- __Comments__  are annotations made by the programmer
+- __Indentation__ is proper spacing to make things look organized.
+- __Variable names__ should be chosen to help describe what the variable is.
+
+---
+
+
+## Program Distribution
