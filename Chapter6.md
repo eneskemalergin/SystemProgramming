@@ -530,3 +530,66 @@ main: 7
 
 
 ## Program Distribution
+
+- If the target distribution is systems that are exactly the same as the one on which the program is written, than the executable can be distributed.
+
+- If the target computers run different operating systems or have different hardware, then either the source code must be compiled for all the desired platforms prior to distribution, or the source code itself needs to be distributed so that it can be compiled on the target systems.
+
+### Archives
+
+- An archiving tool groups together a set of files into a single file called an _archive file_, which contains the contents of all the individual files plus some metadata.
+
+> The metadata usually details the sizes of the files, the last modified dates and times of the files, each file’s path or subdirectory, and possibly additional information.
+
+The ```tar``` program is used more generically for almost any type of file:
+
+```Bash
+> ls
+main.c Makefile sqrt.c
+
+> tar cf dist.tar *
+
+> ls
+dist.tar main.c Makefile sqrt.c
+
+> tar tf dist.tar # Check inside the .tar
+main.c
+Makefile
+sqrt.c
+
+>
+```
+
+the ```tar``` was used to create an archive file named ```dist.tar``` containing all files in the current directory.
+
+The ```tar``` program does not provide compression. Instead, it relies upon the ```gzip``` compression tool for post-archiving compression and decompression. For example:
+
+```Bash
+> ls -l
+-rw-r--r-- 1 ahoover fusion 10240 Oct 15 2008 dist.tar
+-rw-r--r-- 1 ahoover fusion 221 Oct 15 2008 main.c
+-rw-r--r-- 1 ahoover fusion 125 Oct 15 2008 Makefile
+-rw-r--r-- 1 ahoover fusion 171 Oct 15 2008 sqrt.c
+
+> gzip dist.tar
+> ls -l dist.tar.gz
+-rw-r--r-- 1 ahoover fusion 485 Oct 15 2008 dist.tar.gz
+>
+```
+
+- Note that the archive file was originally larger than even the sum of the contents of the individual files inside it.
+
+### Packages
+A package management system is a more advanced program distribution tool. A package file is similar to an archive file, but it contains additional information:
+
+- may describe how to compile or execute files extracted from the package file
+- may describe how to install or organize files on a target system
+- where the exact destination of each file depends upon how the target system is configured
+
+
+The packages stored there sometimes contain executables built for specific target systems. Using packages in this manner is not very different from using more traditional archive files.
+
+- Advantage: installation of such a package is quick;
+- Disadvantage: the build contained within the package must exactly match the specifications of the target system
+
+> End of Chapter...
