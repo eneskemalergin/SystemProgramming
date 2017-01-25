@@ -10,20 +10,22 @@
 
 #include <stdio.h>
 
-int main() // int  added
+// main() -> int main()
+int main()
 {
-char word[80];
-int i,j;
+char word[80];                   // Create a character variable with 80 space available.
+int i,j;                         // Create i and j variable as integer
 
-printf("Enter any word: ");
-scanf("%s",word);
-i=0;
-while (word[i] != '\0')
+printf("Enter any word: ");      // Prints the user prompt message
+scanf("%s",word);                // Prompts the user to put a word
+i=0;                             // Initialize loop counter
+while (word[i] != '\0')          // Run over the character sequence until end character ('\0')
   {
-  if (word[i] == word[i+1])
+  if (word[i] == word[i+1])      // If there are two consecutive characters
+  {
+    j=0;                         // Start
+    while (word[i] == word[i+j]) //
     {
-    j=1;
-    while (word[i] == word[i+j]){
       j++;
     }
     printf("%d consecutive %c\n",j,word[i]);

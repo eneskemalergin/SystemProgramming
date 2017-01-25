@@ -6,18 +6,17 @@
 #include <stdio.h>
 
 int main()
-
 {
-int	i,sum;
+  int	i,sum;                    // Initialize i and sum as integer variables
 
-sum=0;
-for (i=0; i<10; i++){
+  sum=0;                        // Store value 0 in sum variable
+  for (i=0; i<10; i++){         // Loop 10 times
 
 
-  if (i < 5)
-    sum=sum+i;
-  else
-    sum=sum+((i-3)/2+(i/3));
-  }
-  printf("sum=%d\n",sum);
+    if (i < 5)                  // If i is smaller than 5
+      sum=sum+i;                // Increment sum by i
+    else                        // Otherwise
+      sum=sum+((i-3)/2+(i/3));  // Increment sum by ((i-3)/2+(i/3))
+    }
+    printf("sum=%d\n",sum);     // Print the value of sum
 }
