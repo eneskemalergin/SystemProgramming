@@ -1,4 +1,5 @@
-/* Write a memory map for the following code. Show all values at the end of execution of the program.*/
+/* Write a memory map for the following code. Show all values at the end of
+execution of the program.*/
 
 #include <stdio.h>
 
@@ -31,10 +32,5 @@ s[1]	 		| 413		  |  0111 0010																	|  r
 s[2]   		| 414     |	 0110 1111																	|  o
 s[3]   		| 415			|  0110 0111																	|  g
 s[4]-s[9] | 416-421 |  0000 0000 																	|
-
-
-
-
-
 
 */
